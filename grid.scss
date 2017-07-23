@@ -1,0 +1,213 @@
+$font-size: 14px;
+$line-height:20px;
+$base-width:1170px;
+$columns:12;
+$display_md:1200px;
+$display_sm:992px;
+$display_xs:560px; //768
+$margin_offset:15px;
+$box-sizing:border-box;
+body{
+	font-size: $font-size;
+	line-height: $line-height;
+}
+@mixin container ($base-width:$base-width, $box-sizing:border-box){
+	max-width: $base-width;
+	margin: 0 auto;
+	padding: 0 15px;
+	box-sizing: $box-sizing;
+	@content;
+}
+@mixin row-flex{
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0 #{-$margin_offset};
+	@content;
+}
+@mixin row-betw{
+	@include row-flex;
+	justify-content: space-between;
+	@content;
+}
+@mixin row-ardn{
+	@include row-flex;
+	justify-content: space-around;
+	@content;
+}
+@mixin col-flex{
+	display: flex;
+	flex-direction: column;
+	margin: 0 -15px;
+}
+@mixin col-betw{
+	@include col-flex;
+	justify-content: space-between;
+	@content;
+}
+@mixin col-ardn{
+	@include col-flex;
+	justify-content: space-around;
+	@content;
+}
+@mixin module-prop($margin_offset:$margin_offset){
+	box-sizing: border-box;
+    margin-left: $margin_offset;
+    margin-right: $margin_offset;
+    word-wrap: break-word;
+}
+@mixin fmod($display_size, $i, $cols:$columns, $margin_offset:$margin_offset){ //генератор свойств
+	@if $cols == 0 {$cols:$columns}
+	@if $margin_offset == 0 {$margin_offset:0px}
+	$med:null;
+	$size:null;
+		@if $display_size == lg {$med:min-width; $size:$display_md}
+		@if $display_size == md {$med:max-width; $size:$display_md}
+		@if $display_size == sm {$med:max-width; $size:$display_sm}
+		@if $display_size == xs {$med:max-width; $size:$display_xs}
+		@media screen and ($med:$size){
+			@include module-prop($margin_offset);
+			$w:(#{$i * 100 / $cols}) + '%';
+			$m_off:$margin_offset*2;
+			// width: calc(#{$w} - #{$m_off});
+			flex-basis: calc(#{$w} - #{$m_off});
+		}
+	@content;
+}
+@mixin wmod($display_size, $i, $cols:$columns, $margin_offset:$margin_offset){ //генератор свойств
+	@if $cols == 0 {$cols:$columns}
+	@if $margin_offset == 0 {$margin_offset:0px}
+	$med:null;
+	$size:null;
+		@if $display_size == lg {$med:min-width; $size:$display_md}
+		@if $display_size == md {$med:max-width; $size:$display_md}
+		@if $display_size == sm {$med:max-width; $size:$display_sm}
+		@if $display_size == xs {$med:max-width; $size:$display_xs}
+		@media screen and ($med:$size){
+			@include module-prop($margin_offset);
+			$w:(#{$i * 100 / $cols}) + '%';
+			$m_off:$margin_offset*2;
+			width: calc(#{$w} - #{$m_off});
+			// flex-basis: calc(#{$w} - #{$m_off});
+		}
+	@content;
+}
+@mixin offset-margin($direction, $display_size, $i, $cols:$columns, $margin_offset:$margin_offset){
+	@if $cols == 0 {$cols:$columns}
+	@if $margin_offset == 0 {$margin_offset:0px}
+	$med:null;
+	$size:null;
+		@if $display_size == lg {$med:min-width; $size:$display_md}
+		@if $display_size == md {$med:max-width; $size:$display_md}
+		@if $display_size == sm {$med:max-width; $size:$display_sm}
+		@if $display_size == xs {$med:max-width; $size:$display_xs}
+		@media screen and ($med:$size){
+			$w:(#{$i * 100 / $cols}) + '%';
+	$margin:null;
+		@if $direction == right {$margin:margin-right}
+		@if $direction == left {$margin:margin-left}
+			#{$margin}: calc(#{$w} + #{$margin_offset});
+
+		}
+	@content;
+}
+@mixin offset-padding($direction, $display_size, $i, $cols:$columns, $margin_offset:$margin_offset){
+	@if $cols == 0 {$cols:$columns}
+	@if $margin_offset == 0 {$margin_offset:0px}
+	$med:null;
+	$size:null;
+		@if $display_size == lg {$med:min-width; $size:$display_md}
+		@if $display_size == md {$med:max-width; $size:$display_md}
+		@if $display_size == sm {$med:max-width; $size:$display_sm}
+		@if $display_size == xs {$med:max-width; $size:$display_xs}
+		@media screen and ($med:$size){
+			$w:(#{$i * 100 / $cols}) + '%';
+	$padding:null;
+		@if $direction == right {$padding:padding-right}
+		@if $direction == left {$padding:padding-left}
+			#{$padding}: calc(#{$w} + #{$margin_offset});
+		}
+	@content;
+}
+@mixin reset(){
+    body,div,dl,dt,dd,ul,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,input,textarea,p,blockquote,th,td{
+        margin: 0;
+        padding: 0;
+    }
+    table{
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+    fieldset,img,abbr{
+        border: 0;
+    }
+    address,caption,cite,code,dfn,em,strong,th,var{
+        font-style: normal;
+        font-weight: normal;
+    }
+    ul li{
+        list-style: none;
+    }
+    caption,th{
+        text-align: left;
+    }
+    h1,h2,h3,h4,h5,h6{
+        font-size: 100%;
+        font-weight: normal;
+    }
+    sup{
+        vertical-align: text-top;
+    }
+    sub{
+        vertical-align: text-bottom;
+    }
+    input,textarea,select{
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+    }
+    legend{
+        color: #000;
+    }
+    article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,main{
+        display: block;
+    }
+    img{
+        max-width: 100%;
+        height: auto;
+    }
+}
+// @mixin generator-col{ //генератор всей сетки
+// 	$med:null;
+// 	$size:null;
+// 	@each $display_size in -lg-, -md-, -sm-, -xs-{
+// 		@if $display_size == -lg- {$med:min-width; $size:$display_md}
+// 		@if $display_size == -md- {$med:max-width; $size:$display_md}
+// 		@if $display_size == -sm- {$med:max-width; $size:$display_sm}
+// 		@if $display_size == -xs- {$med:max-width; $size:$display_xs}
+// 		@media screen and ($med:$size){
+// 			@for $i from 1 through 12{
+// 				&#{$display_size}#{$i}{
+// 					@include module-prop;
+// 					$w:(#{$i * 100 / 12}) + '%';
+// 					width: calc(#{$w} - 30px);
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+// @mixin generator-mod($display_size, $i){ //генератор классов и свойств
+// 	$med:null;
+// 	$size:null;
+// 		@if $display_size == -lg- {$med:min-width; $size:$display_md}
+// 		@if $display_size == -md- {$med:max-width; $size:$display_md}
+// 		@if $display_size == -sm- {$med:max-width; $size:$display_sm}
+// 		@if $display_size == -xs- {$med:max-width; $size:$display_xs}
+// 		@media screen and ($med:$size){
+// 			&#{$display_size}#{$i}{
+// 				@include module-prop;
+// 				$w:(#{$i * 100 / 12}) + '%';
+// 				width: calc(#{$w} - 30px);
+// 			}
+// 		}
+	
+// }
